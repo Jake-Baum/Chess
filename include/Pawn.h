@@ -2,8 +2,9 @@
 
 class Pawn: public Piece {
   private:
-    const char c = 'P';
+    static const char c = 'P';
 
   public:
+    Pawn(Colour);
     virtual char getChar();
 };

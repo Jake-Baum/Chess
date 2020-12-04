@@ -15,4 +15,5 @@ class Board {
     void print();
     std::vector<Pair> getPossibleMoves(Pair);
     Piece **operator[](int);
+    void movePiece(Pair, Pair);
 };

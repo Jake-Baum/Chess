@@ -17,23 +17,32 @@ int main()
 void gameLoop()
 {
     Board board;
-    board.print();
 
     std::string inp;
 
     while (true)
     {
+        board.print();
         std::cout << "Select piece: ";
         std::getline(std::cin, inp);
         Pair selectedCoords = parseInput(inp);
         if (Board::isPairWithinBounds(selectedCoords))
         {
-            Piece *selected = board[selectedCoords.first][selectedCoords.second];
-            std::cout << "You have selected: " << (selected != NULL ? selected->getChar() : '_') << std::endl;
-            if (selected != NULL)
+            Piece *selectedPiece = board[selectedCoords.first][selectedCoords.second];
+            std::cout << "You have selected: " << (selectedPiece != NULL ? selectedPiece->getChar() : '_') << std::endl;
+            if (selectedPiece != NULL)
             {
                 std::vector<Pair> possibleMoves = board.getPossibleMoves(selectedCoords);
                 printPossibleMoves(possibleMoves);
+                
+                std::cout << "Select move: ";
+                std::getline(std::cin, inp);
+
+                int moveSelection = atoi(inp.c_str()) - 1;
+                Pair selectedMove = possibleMoves[moveSelection];
+                std::cout << "You have selected to move piece to: " << pairToString(selectedMove) << std::endl;
+
+                board.movePiece(selectedCoords, selectedMove);
             }
         }
     }
@@ -52,8 +61,11 @@ std::string pairToString(Pair pair)
 void printPossibleMoves(std::vector<Pair> possibleMoves)
 {
     std::cout << "There are " << possibleMoves.size() << " possible moves." << std::endl;
+
+    int selector = 1;
     for (Pair move : possibleMoves)
     {
-        std::cout << pairToString(move) << std::endl;
+        std::cout << selector << ": " << pairToString(move) << std::endl;
+        selector++;
     }
 }

@@ -13,8 +13,8 @@ Board::Board()
   }
   for (int i = 0; i < 8; i++)
   {
-    board[1][i] = new Pawn();
-    board[6][i] = new Pawn();
+    board[1][i] = new Pawn(Colour::WHITE);
+    board[6][i] = new Pawn(Colour::BLACK);
   }
 }
 
@@ -34,19 +34,17 @@ void Board::print()
   std::cout << "  ";
   for (char column = 'A'; column <= 'H'; column++)
   {
-    std::cout << column << ' ';
+    std::cout << column << "  ";
   }
   std::cout << "\n";
-  int rowNum = 1;
-  for (auto &row : board)
+  for (int rowNum = 7; rowNum >= 0; rowNum--)
   {
-    std::cout << rowNum << '|';
-    for (auto &tile : row)
+    std::cout << rowNum + 1 << '|';
+    for (auto &tile : board[rowNum])
     {
-      std::cout << (tile != NULL ? tile->getChar() : '_') << '|';
+      std::cout << (tile != NULL ? std::string() + tile->getChar() + (char)tile->COLOUR : "__") << '|';
     }
     std::cout << '\n';
-    rowNum++;
   }
 }
 
@@ -76,4 +74,10 @@ bool Board::isPairWithinBounds(Pair move)
 Piece **Board::operator[](int index)
 {
   return board[index];
+}
+
+void Board:: movePiece(Pair pieceCoords, Pair moveCoords) {
+  Piece *piece = board[pieceCoords.first][pieceCoords.second];
+  board[pieceCoords.first][pieceCoords.second] = NULL;
+  board[moveCoords.first][moveCoords.second] = piece;
 }
