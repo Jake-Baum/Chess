@@ -1,7 +1,5 @@
 #include "Pawn.h"
 
-#include <vector>
-
 class Board {
   private:
     Piece *board[8][8];
