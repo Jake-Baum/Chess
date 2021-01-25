@@ -3,13 +3,21 @@
 
 typedef std::pair<int, int> Pair;
 
-enum Colour { WHITE = 'W', BLACK = 'B' };
+enum Colour
+{
+  WHITE = 'W',
+  BLACK = 'B'
+};
 
-class Piece {
-  public:
-    const Colour COLOUR;
+class Piece
+{
+protected:
+  Piece(const Colour colour, const std::vector<Pair> moveOffsets) : COLOUR(colour), MOVE_OFFSETS(moveOffsets.begin(), moveOffsets.end()){};
 
-    Piece(Colour colour): COLOUR(colour) {};
-    virtual char getChar() = 0;
-    virtual std::vector<Pair> getMoveOffsets() = 0;
+public:
+  const Colour COLOUR;
+  const std::vector<Pair> MOVE_OFFSETS;
+
+  // virtual ~Piece() = 0;
+  virtual char getChar() = 0;
 };

@@ -54,7 +54,7 @@ std::vector<Pair> Board::getPossibleMoves(Pair selectedCoords)
   std::vector<Pair> possibleMoves;
   Piece *selected = board[row][column];
 
-  for (Pair moveOffset: selected->getMoveOffsets())
+  for (Pair moveOffset: selected->MOVE_OFFSETS)
   {
     Pair move = {row + moveOffset.second,
                  column + moveOffset.first};
