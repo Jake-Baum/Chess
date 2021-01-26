@@ -20,29 +20,37 @@ void gameLoop()
 
     std::string inp;
 
+    Colour whoseTurn = WHITE;
+
     while (true)
     {
         board.print();
-        std::cout << "Select piece: ";
+        std::cout << "Select piece (" << (char)whoseTurn << "): ";
         std::getline(std::cin, inp);
         Pair selectedCoords = parseInput(inp);
         if (Board::isPairWithinBounds(selectedCoords))
         {
             Piece *selectedPiece = board[selectedCoords.first][selectedCoords.second];
-            std::cout << "You have selected: " << (selectedPiece != NULL ? selectedPiece->getChar() : '_') << std::endl;
-            if (selectedPiece != NULL)
+            if (selectedPiece != NULL && selectedPiece->COLOUR == whoseTurn)
             {
+                std::cout << "You have selected: " << selectedPiece->getChar() << std::endl;
+
                 std::vector<Pair> possibleMoves = board.getPossibleMoves(selectedCoords);
                 printPossibleMoves(possibleMoves);
-                
-                std::cout << "Select move: ";
-                std::getline(std::cin, inp);
 
-                int moveSelection = atoi(inp.c_str()) - 1;
-                Pair selectedMove = possibleMoves[moveSelection];
-                std::cout << "You have selected to move piece to: " << pairToString(selectedMove) << std::endl;
+                if (!possibleMoves.empty())
+                {
+                    std::cout << "Select move: ";
+                    std::getline(std::cin, inp);
 
-                board.movePiece(selectedCoords, selectedMove);
+                    int moveSelection = atoi(inp.c_str()) - 1;
+                    Pair selectedMove = possibleMoves[moveSelection];
+                    std::cout << "You have selected to move piece to: " << pairToString(selectedMove) << std::endl;
+
+                    board.movePiece(selectedCoords, selectedMove);
+
+                    whoseTurn = whoseTurn == WHITE ? BLACK : WHITE;
+                }
             }
         }
     }
