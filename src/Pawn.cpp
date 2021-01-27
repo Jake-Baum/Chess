@@ -1,12 +1,12 @@
 #include "../include/Pawn.h"
 
-const std::vector<Pair> Pawn::MOVE_OFFSETS{std::make_pair(0, 1)};
-
-Pawn::Pawn(const Colour colour) : Piece(colour, MOVE_OFFSETS) {}
-
-// Pawn::~Pawn() {}
+Pawn::Pawn(const Colour colour) : Piece(colour) {}
 
 char Pawn::getChar()
 {
   return c;
+}
+
+std::vector<Pair> Pawn::getPossibleMoves(int boardSize) {
+  return std::vector<Pair>{std::make_pair(0, colour == WHITE ? 1 : -1)};
 }

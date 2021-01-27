@@ -42,7 +42,7 @@ void Board::print()
     std::cout << rowNum + 1 << '|';
     for (auto &tile : board[rowNum])
     {
-      std::cout << (tile != NULL ? std::string() + tile->getChar() + (char)tile->COLOUR : "__") << '|';
+      std::cout << (tile != NULL ? std::string() + tile->getChar() + (char)tile->colour : "__") << '|';
     }
     std::cout << '\n';
   }
@@ -54,7 +54,7 @@ std::vector<Pair> Board::getPossibleMoves(Pair selectedCoords)
   std::vector<Pair> possibleMoves;
   Piece *selected = board[row][column];
 
-  for (Pair moveOffset: selected->MOVE_OFFSETS)
+  for (Pair moveOffset: selected->getPossibleMoves())
   {
     Pair move = {row + moveOffset.second,
                  column + moveOffset.first};

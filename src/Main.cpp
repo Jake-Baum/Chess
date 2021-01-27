@@ -1,10 +1,10 @@
 #include "../include/Board.h"
+#include "../include/Player.h"
 
-#include <iostream>
-#include <string>
+#include <map>
 
 void gameLoop();
-Pair parseInput(std::string);
+void turn(Board &, Player);
 std::string pairToString(Pair);
 void printPossibleMoves(std::vector<Pair>);
 
@@ -17,21 +17,31 @@ int main()
 void gameLoop()
 {
     Board board;
-
-    std::string inp;
-
     Colour whoseTurn = WHITE;
+    std::map<Colour, Player> players;
+    Player white(WHITE), black(BLACK);
+    players.emplace(WHITE, Player(WHITE));
+    players.emplace(BLACK, Player(BLACK));
 
     while (true)
     {
+        turn(board, players[whoseTurn]);
+        whoseTurn = whoseTurn == WHITE ? BLACK : WHITE;
+    }
+}
+
+void turn(Board &board, Player player)
+{
+    while (true)
+    {
         board.print();
-        std::cout << "Select piece (" << (char)whoseTurn << "): ";
-        std::getline(std::cin, inp);
-        Pair selectedCoords = parseInput(inp);
+        std::cout << "Select piece (" << (char)player.colour << "): ";
+        Pair selectedCoords = player.selectPiece();
+
         if (Board::isPairWithinBounds(selectedCoords))
         {
             Piece *selectedPiece = board[selectedCoords.first][selectedCoords.second];
-            if (selectedPiece != NULL && selectedPiece->COLOUR == whoseTurn)
+            if (selectedPiece != NULL && selectedPiece->colour == player.colour)
             {
                 std::cout << "You have selected: " << selectedPiece->getChar() << std::endl;
 
@@ -41,24 +51,15 @@ void gameLoop()
                 if (!possibleMoves.empty())
                 {
                     std::cout << "Select move: ";
-                    std::getline(std::cin, inp);
-
-                    int moveSelection = atoi(inp.c_str()) - 1;
-                    Pair selectedMove = possibleMoves[moveSelection];
+                    Pair selectedMove = possibleMoves[player.selectMove()];
                     std::cout << "You have selected to move piece to: " << pairToString(selectedMove) << std::endl;
 
                     board.movePiece(selectedCoords, selectedMove);
-
-                    whoseTurn = whoseTurn == WHITE ? BLACK : WHITE;
+                    return;
                 }
             }
         }
     }
-}
-
-Pair parseInput(std::string inp)
-{
-    return Pair(inp[1] - '0' - 1, inp[0] - 'A');
 }
 
 std::string pairToString(Pair pair)

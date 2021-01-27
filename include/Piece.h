@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <iterator>
 
+#pragma once
+
 typedef std::pair<int, int> Pair;
 
 enum Colour
@@ -18,18 +20,17 @@ private:
   {
     std::vector<Pair> transformed;
     std::transform(moveOffsets.begin(), moveOffsets.end(), std::back_inserter(transformed), [this](Pair pair) {
-      return Pair{pair.first, pair.second * (this->COLOUR == BLACK ? -1 : 1)};
+      return Pair{pair.first, pair.second * (this->colour == BLACK ? -1 : 1)};
     });
     return transformed;
   }
 
 protected:
-  Piece(const Colour colour, std::vector<Pair> moveOffsets) : COLOUR(colour), MOVE_OFFSETS(transformMoveOffsets(moveOffsets)){};
+  Piece(const Colour colour) : colour(colour){};
 
 public:
-  const Colour COLOUR;
-  const std::vector<Pair> MOVE_OFFSETS;
+  const Colour colour;
 
-  // virtual ~Piece() = 0;
   virtual char getChar() = 0;
+  virtual std::vector<Pair> getPossibleMoves(int = 8) = 0;
 };
